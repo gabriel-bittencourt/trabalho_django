@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block titulo %}
+    Title
+{% endblock %}
+
+{% block content %}
+    <div class="row bg-light">
+         <!-- Barra lateral esquerda -->
+         <div class="col-lg-3 mt-4">
+
+            <!-- Categorias -->
+            <div class="list-group mt-4">
+
+                {% for cat, subcats in subcategorias.items %}
+
+                    {% with 'collapse'|add:cat.nome as target and '#collapse'|add:cat.nome as targetRef %}
+                    <div class="subcategories-group">
+                        <a class="list-group-item" data-toggle="collapse"
+                            href="{{targetRef}}"
+                            role="button" aria-expanded="false" aria-controls="{{target}}">
+                            {{ cat.nome }}
+                        </a>
+                        <!-- Subcategorias -->
+                        <div class="collapse" id="{{target}}">
+                            {% with subcats as subs %}
+                                {% for i in subs %}
+                                    <a class="dropdown-item text-primary" href="{{ i.slug }}">{{i}}</a>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                    {% endwith %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+        <!-- /.col-lg-3 -->
+
+        <!-- Principal -->
+        <div class="col-lg-8">
+
+            <!-- Produtos -->
+            <div class="row mt-5">
+
+                {% for subcat, produtos in produtos.items %}
+                {% for produto in produtos %}
+                    
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <a href="{{ produto.get_absolute_path }}" class="d-flex justify-content-center py-1">
+                                <img class="card-img-top" style="width: 115px; height: 350px" src="{% static 'produto/images/' %}{{ produto.imagem }}"
+                                alt="">
+                        </a>
+                        <div class="card-body d-flex flex-column justify-content-start">
+                            <h4 class="card-title">
+                                <a href="{{ produto.get_absolute_path }}" class="itemName">{{produto.nome}}</a>
+                            </h4>
+                            <h6 class="card-subtitle text-muted">
+                                <a href="#" class="text-secondary">{{produto.marca}}</a>
+                            </h6>
+                            <h5 class="itemPrice align-self-start mt-auto">$ {{produto.preco}}</h5>
+                            <div class="container mt-auto">
+                                <button type="button" class="add-cart-btn w-100">
+                                    <span>Add to Cart</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
+
+            </div>
+            <!-- /.row -->
+
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+            </div>
+            <!-- /.col-lg-9 -->
+
+    </div>
+{% endblock %}

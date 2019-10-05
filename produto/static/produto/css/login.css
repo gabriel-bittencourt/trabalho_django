@@ -1,0 +1,134 @@
+body {
+    padding-top: 100px;
+}
+
+input {
+    border: none;
+}
+
+.wrap-login {
+    overflow: hidden;
+    padding: 77px 55px 33px 55px;
+}
+
+.form-login-title {
+    font-size: 33px;
+}
+
+.input-field {
+    font-size: 20px;
+    line-height: 1.2;
+    height: 45px;
+    /* background: transparent; */
+}
+
+.focus-input-field {
+    height: 100%;
+    pointer-events: none;
+}
+
+.focus-input-field::before {
+    content: "";
+    display: block;
+    position: static;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    transition: all 0.6s;
+
+    background: #007bff;
+    background: -webkit-linear-gradient(left, #21d4fd, #b721ff);
+    background: -o-linear-gradient(left, #21d4fd, #b721ff);
+    background: -moz-linear-gradient(left, #21d4fd, #b721ff);
+    background: linear-gradient(left, #21d4fd, #b721ff);
+}
+
+.focus-input-field::after {
+    font-size: 18px;
+    color: #999999;
+    line-height: 1.2;
+    content: attr(data-placeholder);
+    display: block;
+    position: absolute;
+    top: 16px;
+    left: 0px;
+    padding-left: 5px;
+    -webkit-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.input-field:focus + .focus-input-field::after {
+    top: -16px;
+}
+
+.input-field:focus + .focus-input-field::before {
+    width: 100%;
+}
+
+.has-val.input-field + .focus-input-field::after {
+    top: -15px;
+}
+
+.has-val.input-field+.focus-input-field::before {
+    width: 100%;
+}
+
+.wrap-login100-form-btn {
+    /* z-index: 1; */
+    border-radius: 20px;
+    /* overflow: hidden; */
+}
+
+#password-field {
+    line-height: 5;
+    height: 40px;
+    padding-top: 17px;
+}
+
+.field-icon {
+    color: #6c757d;
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+}
+
+.passReset {
+    color: #6c757d;
+}
+
+.passReset:hover{
+    color: #007bff;
+    text-decoration: none;
+}
+
+.btn-login{
+    color: gainsboro;
+    background: #007bff;
+    opacity: 0.8;
+    font-size: 25px;
+}
+
+.btn-login:hover{
+    color: white;
+    opacity: 1;
+    transform: scale(1.01);
+    transition: all 0.3s;
+    -ms-transition: all 1s ease-in-out;
+}
+
+.wrap-login100-form-btn:hover .login100-form-bgbtn {
+    left: 0;
+}
+
+.validate-input {
+    position: relative;
+}
+
+footer {
+    position: fixed;
+}
