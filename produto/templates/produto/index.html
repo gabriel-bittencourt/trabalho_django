@@ -27,7 +27,7 @@
                         <div class="collapse" id="{{target}}">
                             {% with subcats as subs %}
                                 {% for i in subs %}
-                                    <a class="dropdown-item text-primary" href="{{ i.slug }}">{{i}}</a>
+                                    <a class="dropdown-item text-primary" href="{{ i.get_absolute_path }}">{{i}}</a>
                                 {% endfor %}
                             {% endwith %}
                         </div>
@@ -47,7 +47,7 @@
             <!-- Produtos -->
             <div class="row mt-5">
 
-                {% for subcat, produtos in produtos.items %}
+                
                 {% for produto in produtos %}
                     
                 <div class="col-lg-4 col-md-6 mb-4">
@@ -61,6 +61,7 @@
                                 <a href="{{ produto.get_absolute_path }}" class="itemName">{{produto.nome}}</a>
                             </h4>
                             <h6 class="card-subtitle text-muted">
+                                <h6>{{ produto.get_absolute_path }}</h6>
                                 <a href="#" class="text-secondary">{{produto.marca}}</a>
                             </h6>
                             <h5 class="itemPrice align-self-start mt-auto">$ {{produto.preco}}</h5>
@@ -72,9 +73,9 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-                {% endfor %}
 
+                {% endfor %}
+                
             </div>
             <!-- /.row -->
 

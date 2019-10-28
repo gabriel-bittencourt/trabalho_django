@@ -4,9 +4,15 @@ from . import views
 app_name = 'produto'
 
 urlpatterns = [
+    # Página inicial (Todos os produtos)
     path('', views.lista_produtos, name='lista_produtos'),
 
-    path('<slug:slug_categoria>/', views.lista_produtos,  name='lista_produtos_por_categoria'),
+    # Página de cadastro de novos itens
+    path('cadastra/', views.cadastra, name="cadastra"),
 
+    # Página de produtos filtrados por subcategoria
+    path('subcategoria/<slug:slug_subcategoria>/', views.lista_produtos,  name='lista_produtos_por_subcategoria'),
+
+    # Página específica de cada produto
     path('<int:id>/<slug:slug_produto>/', views.exibe_produto, name='exibe_produto'),
 ]
