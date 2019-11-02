@@ -135,15 +135,13 @@ def cadastra(request):
                 messages.add_message(request, messages.INFO,
                                      'Produto cadastrado com sucesso!')
 
-            return redirect('produto:exibe_produto', id=produto.id)
+            return redirect('produto:exibe_produto', id=produto.id, slug_produto=produto.slug)
 
         else:
-            print("NOT VALID")
             messages.add_message(request, messages.ERROR,
                                  'Corrija o(s) erro(s) abaixo.')
 
     else:
-        print("\n\nELSE\n\n")
         produto_form = ProdutoForm()
 
     # print(type(produto_form))
