@@ -34,8 +34,6 @@ def lista_produtos(request, slug_subcategoria=None):
         if len(lista_produtos) == 0:
             messages.add_message(request, messages.INFO, 'Nenhum produto encontrado.')
 
-        print(vars(messages))
-
         # Cria tuplas (Produto, Subcategoria)
         for produto in lista_produtos:
             subcategoria = get_object_or_404(
@@ -47,6 +45,8 @@ def lista_produtos(request, slug_subcategoria=None):
 
         # Carrega os produtos de apenas para uma subcategoria
         if slug_subcategoria:
+            produtos_subcategorias = []
+
             subcategoria = get_object_or_404(
                 SubCategoria, slug=slug_subcategoria)
             lista_produtos = Produto.objects.filter(subCategoria=subcategoria)
