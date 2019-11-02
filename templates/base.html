@@ -48,15 +48,10 @@
 
             <div class="collapse navbar-collapse" id="navbarsExample04">
 
-                <div class="container d-flex justify-content">
-                    <form
-                        class="form-inline my-2 my-md-0 ml-auto w-100 d-flex justify-content-md-start justify-content-lg-end">
-                        <input class="form-control w-75 mr-2" placeholder="Pesquisa" type="text">
-                        <button id="btnSearch" class="btn btn-primary" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-                </div>
+                <!-- Barra de pesquisa -->
+                {% block searchBar %}
+
+                {% endblock %}
 
                 <ul class="navbar-nav">
 

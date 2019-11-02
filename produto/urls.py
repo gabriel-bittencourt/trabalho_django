@@ -15,4 +15,7 @@ urlpatterns = [
 
     # Página específica de cada produto
     path('<int:id>/<slug:slug_produto>/', views.exibe_produto, name='exibe_produto'),
+
+    # Página de resultados de pesquisa de produtos
+    path('pesquisa_produto/', views.pesquisa_produto, name='pesquisa_produto'),
 ]

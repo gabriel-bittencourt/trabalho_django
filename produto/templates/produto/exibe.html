@@ -7,12 +7,17 @@
 {% endblock %}
 
 {% block customStyles %}
-<link href="{% static 'produto/css/item.css' %}" rel="stylesheet">
+    <link href="{% static 'produto/css/item.css' %}" rel="stylesheet">
 {% endblock %}
+
+{% block searchBar %}
+    {% include "components/barra_pesquisa.html" %}
+{% endblock %}
+
 
 {% block content %}
 
-<div class="container py-3 px-md-5 bg-white">
+    <div class="container py-3 px-md-5 bg-white">
 
         <!-- Passar url com parâmetros -->
         <!-- <h6>{% url 'produto:exibe_produto' id=1 slug_produto="les-paul-tribute" %}</h6> -->
@@ -21,7 +26,7 @@
         <div class="row mx-md-4 mx-sm-0 p-lg-0 py-md-1 py-sm-0 ">
 
             <div class="col-lg-5 col-md-6 col-sm-12 px-5 pt-3 d-flex justify-content-center">
-                <img class="card-img-top img-fluid" style="height: 700px; width: 230px;" alt="" 
+                <img class="card-img-top img-fluid" style="height: 700px; width: 230px;" alt=""
                     src="{% static 'produto/images/' %}{{ produto.imagem }}">
             </div>
 
@@ -30,7 +35,7 @@
                 <div class="card-body">
                     <h3 class="card-title" id="itemName">{{produto.subCategoria.nome}} {{produto.nome}}</h3>
                     <h4 class="mb-4">{{produto.marca}}</h4>
-                    <h4 id="itemPrice">$ {{produto.preco}}</h4>
+                    <h3 id="itemPrice">$ {{produto.preco}}</h3>
                     <p id="itemDescription" class="card-text">
                         {{produto.descricao}}
                     </p>
@@ -64,44 +69,10 @@
 
         </div>
 
-        <div class="col-lg-12 px-5">
-
-
-            <!-- /.card -->
-
-            <div class="card card-outline-secondary my-4">
-                <div class="card-header">
-                    Product Reviews
-                </div>
-                <div class="card-body">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore,
-                        similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum.
-                        Sequi mollitia, necessitatibus quae sint natus.</p>
-                    <small class="text-muted">Posted by Anonymous on 01/01/19</small>
-                    <hr>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore,
-                        similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum.
-                        Sequi mollitia, necessitatibus quae sint natus.</p>
-                    <small class="text-muted">Posted by Anonymous on 01/01/19</small>
-                    <hr>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore,
-                        similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum.
-                        Sequi mollitia, necessitatibus quae sint natus.</p>
-                    <small class="text-muted">Posted by Anonymous on 01/01/19</small>
-                    <hr>
-                    <button type="button" class="add-cart-btn">
-                        <span>Leave a review</span>
-                    </button>
-                </div>
-            </div>
-            <!-- /.card -->
-
-        </div>
-
     </div>
     <!-- /.container -->
 
-{% block customScript %}
+    {% block customScript %}
     <script>
 
         function like(elem, likeOrDislike) {
@@ -120,9 +91,9 @@
                 btn.attr('status', 'false').removeClass('fas').addClass('far');
                 n.html(parseInt(n.html()) - 1);
             } else {
-                if ( btn_c.attr('status') == 'true' )
-                    like(btn_c, !likeOrDislike );
-                
+                if (btn_c.attr('status') == 'true')
+                    like(btn_c, !likeOrDislike);
+
                 btn.attr('status', 'true').removeClass('far').addClass('fas');
                 n.html(parseInt(n.html()) + 1);
             }
@@ -130,6 +101,6 @@
         }
 
     </script>
-{% endblock %}
+    {% endblock %}
 
 {% endblock %}

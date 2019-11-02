@@ -1,0 +1,19 @@
+<!-- Componente Barra de pesquisa -->
+
+{% load static %}
+
+<div class="container d-flex justify-content">
+    <form 
+        action="{% url 'produto:lista_produtos' %}"
+        method='GET'
+        class="form-inline my-2 my-md-0 ml-auto w-100 d-flex justify-content-md-start justify-content-lg-end"
+    >
+        {{ form.busca_por }}
+        <div class='form-group row'>
+            <button type='submit' class='btn btn-primary'>
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </form>
+
+</div>

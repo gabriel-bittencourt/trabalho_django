@@ -1,0 +1,44 @@
+<!-- Componente Paginação -->
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+
+        <!-- Página Anterior -->
+        {% if produtos.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ produtos.previous_page_number }}">Previous</a>
+            </li>
+        {% else %}
+            <li class="disabled"><a class="page-link">Previous</a></li>
+        {% endif %}
+        <!--  -->
+
+        <!-- Páginas -->
+            {% for i in produtos.paginator.page_range %}
+                <!-- Desativa link para página atual -->
+                {% if produtos.number == i %}
+                    <li class="page-item active">
+                        <a class="page-link">{{i}}<span class="sr-only">(current)</span></a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ i }}">{{i}}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        <!--  -->
+
+        <!-- Próxima página -->
+            {% if produtos.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ produtos.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a class="page-link">Next</a>
+                </li>
+            {% endif %}
+        <!--  -->
+
+    </ul>
+</nav>
