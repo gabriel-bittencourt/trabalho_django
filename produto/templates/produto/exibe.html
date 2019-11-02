@@ -39,30 +39,23 @@
                     <p id="itemDescription" class="card-text">
                         {{produto.descricao}}
                     </p>
-                    <div class="row">
-                        <a class="nav-link a-btn-like" href="#">
-                            <span id="nLikes">25</span>
-                            <i id="btn-like" class="far fa-thumbs-up btn-like" onclick="like(this, true)" status="false"
-                                type="like">
-                            </i>
-                        </a>
-                        <a class="nav-link a-btn-like" href="#">
-                            <i id="btn-dislike" class="far fa-thumbs-down btn-like" onclick="like(this, false)"
-                                status="false" type="dislike">
-                            </i>
-                            <span id="nDislikes">3</span>
-                        </a>
-                    </div>
-                    <!-- <i class="fas fa-thumbs-down"></i> -->
 
                 </div>
                 <div class="container d-flex flex-row justify-content-between p-3">
-                    <button type="button" class="buy-now-btn w-50 mr-4">
-                        <span>Buy Now</span>
-                    </button>
-                    <button type="button" class="add-cart-btn w-50 ">
-                        <span>Add to Cart</span>
-                    </button>
+                    {% if form_remove_produto %}
+                        <button type="button" class="buy-now-btn w-50 mr-4">
+                            <span>Editar</span>
+                        </button>
+
+                        <form id="form_remove_produto" style="flex: 1; width: 100%" action="{% url 'produto:remover' %}"
+                            method="post" novalidate
+                        >
+                            {% csrf_token %}
+                            <button id="botao_remover" type="button" class="delete-btn w-100">
+                                <span>Remover</span>
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
 
             </div>
@@ -72,35 +65,14 @@
     </div>
     <!-- /.container -->
 
-    {% block customScript %}
-    <script>
+{% endblock %}
 
-        function like(elem, likeOrDislike) {
-            let btn, btn_c;
-            let n, n_o;
+{% block domready %}
 
-            if (likeOrDislike) {
-                btn = $('#btn-like'); n = $('#nLikes');
-                btn_c = $('#btn-dislike'); n_o = $('#nDislikes');
-            } else {
-                btn_c = $('#btn-like'); n_o = $('#nLikes');;
-                btn = $('#btn-dislike'); n = $('#nDislikes');
-            }
-
-            if (btn.attr('status') == 'true') {
-                btn.attr('status', 'false').removeClass('fas').addClass('far');
-                n.html(parseInt(n.html()) - 1);
-            } else {
-                if (btn_c.attr('status') == 'true')
-                    like(btn_c, !likeOrDislike);
-
-                btn.attr('status', 'true').removeClass('far').addClass('fas');
-                n.html(parseInt(n.html()) + 1);
-            }
-
-        }
-
-    </script>
-    {% endblock %}
+    $("#botao_remover").click(function() {
+        $("#form_remove_produto").append('{{ form_remove_produto.produto_id }}')
+        $("#form_remove_produto").submit()
+    })
 
 {% endblock %}
+

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 
 from .models import Categoria, SubCategoria, Produto
-from .forms import ProdutoForm, PesquisaProdutoForm
+from .forms import ProdutoForm, PesquisaProdutoForm, RemoveProdutoForm
 
 
 def lista_produtos(request, slug_subcategoria=None):
@@ -32,7 +32,8 @@ def lista_produtos(request, slug_subcategoria=None):
             nome__icontains=busca_por).order_by('nome')
 
         if len(lista_produtos) == 0:
-            messages.add_message(request, messages.INFO, 'Nenhum produto encontrado.')
+            messages.add_message(request, messages.INFO,
+                                 'Nenhum produto encontrado.')
 
         # Cria tuplas (Produto, Subcategoria)
         for produto in lista_produtos:
@@ -74,9 +75,13 @@ def exibe_produto(request, id, slug_produto):
     # Form que será utilizado na barra de busca
     form = PesquisaProdutoForm(request.GET)
 
+    # Form que será utilizado para deletar produto
+    form_remove_produto = RemoveProdutoForm(initial={'produto_id': id})
+
     produto = get_object_or_404(Produto, id=id)
     return render(request, 'produto/exibe.html', {'produto': produto,
-                                                  'form': form})
+                                                  'form': form, 
+                                                  'form_remove_produto': form_remove_produto })
 
 
 def pesquisa_produto(request):
@@ -86,11 +91,8 @@ def pesquisa_produto(request):
     })
 
 
-def cadastra(request):
+def cadastrar(request):
     if request.POST:
-
-        print("\n\nPOST\n\n")
-
         produto_id = request.POST.get('produto_id')
 
         if produto_id:
@@ -100,7 +102,6 @@ def cadastra(request):
             produto_form = ProdutoForm(request.POST)
 
         if produto_form.is_valid():
-            print("\n\nIS VALID\n\n")
 
             # Atualiza, pois produto já existe
             if produto_id:
@@ -145,4 +146,17 @@ def cadastra(request):
         produto_form = ProdutoForm()
 
     # print(type(produto_form))
-    return render(request, 'produto/cadastra.html', {'form': produto_form})
+    return render(request, 'produto/cadastro.html', {'form': produto_form})
+
+
+def remover(request):
+    produto_id = request.POST.get('produto_id')
+
+    produto = get_object_or_404(Produto, id=produto_id)
+
+    produto.delete()
+
+    messages.add_message(request, messages.INFO,
+                         'Produto removido com sucesso.')
+
+    return render(request, 'produto/exibe.html', {'produto': produto})

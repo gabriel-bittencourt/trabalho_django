@@ -8,7 +8,9 @@ urlpatterns = [
     path('', views.lista_produtos, name='lista_produtos'),
 
     # Página de cadastro de novos itens
-    path('cadastra/', views.cadastra, name="cadastra"),
+    path('cadastrar/', views.cadastrar, name="cadastrar"),
+
+    path('remover/', views.remover, name='remover'),
 
     # Página de produtos filtrados por subcategoria
     path('subcategoria/<slug:slug_subcategoria>/', views.lista_produtos,  name='lista_produtos_por_subcategoria'),

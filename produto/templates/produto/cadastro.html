@@ -18,16 +18,16 @@
         </div>
     </div>
 
-    <form id="form" action ="{% url 'produto:cadastra' %}" method ="POST" novalidate>
+    <form id="form" action ="{% url 'produto:cadastrar' %}" method ="POST" novalidate>
 
         <div class="form-group row" style="margin-bottom: 10px;">
             <label for="id_subcategoria" class="col-lg-2 col-form-label font-weight-bold">Sub-categoria</label>
             <div class="col-lg-10">
                 {{ form.subCategoria }}
-                {% if form.subcategoria.errors %}
+                {% if form.subCategoria.errors %}
                     <div class="alert alert-danger mb-0"
                          style="padding-top: 2px; padding-bottom: 2px;">
-                        {% for error in form.subcategoria.errors %}
+                        {% for error in form.subCategoria.errors %}
                             <small>{{ error }}</small>
                         {% endfor %}
                     </div>

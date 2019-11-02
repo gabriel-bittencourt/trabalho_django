@@ -91,5 +91,3 @@ class RemoveProdutoForm(forms.Form):
         fields = ('produto_id')
 
     produto_id = forms.CharField(widget=forms.HiddenInput(), required=True)
-
-    # <input type="hidden" name="produto_id" id="id_produto_id" value="xxx">
