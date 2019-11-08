@@ -70,21 +70,6 @@ class ProdutoForm(forms.ModelForm):
 
         return preco
 
-    def clean_data_cadastro(self):
-        data_cadastro = self.cleaned_data.get('data_cadastro')
-
-        if not data_cadastro:
-            return data_cadastro
-
-        fim = datetime.now().date()
-        inicio = fim - timedelta(days=10)
-
-        if data_cadastro > fim or data_cadastro < inicio:
-            raise forms.ValidationError(
-                'Deve ser entre ' + inicio.strftime('%d/%m/%Y') + " e " + fim.strftime('%d/%m/%Y'))
-
-        return data_cadastro
-
 
 class RemoveProdutoForm(forms.Form):
     class Meta:

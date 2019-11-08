@@ -12,6 +12,8 @@ urlpatterns = [
 
     path('remover/', views.remover, name='remover'),
 
+    path('edita_produto/<int:id>/', views.editar, name='edita_produto'),
+
     # Página de produtos filtrados por subcategoria
     path('subcategoria/<slug:slug_subcategoria>/', views.lista_produtos,  name='lista_produtos_por_subcategoria'),
 

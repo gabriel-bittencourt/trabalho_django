@@ -54,19 +54,9 @@
                 {% endblock %}
 
                 <ul class="navbar-nav">
+                    {% block navBar %}
 
-                    <li class="nav-item" id="shoppingCart">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/login.html">Login</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/register.html">Register</a>
-                    </li>
+                    {% endblock %}
 
                 </ul>
 

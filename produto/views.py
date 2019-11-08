@@ -106,6 +106,8 @@ def cadastrar(request):
             # Atualiza, pois produto já existe
             if produto_id:
                 produto = Produto(
+                    id=produto_id,
+                    descricao=produto.descricao,
                     nome=produto_form.data['nome'],
                     marca=produto_form.data['marca'],
                     preco=produto_form.clean_preco(),
@@ -147,6 +149,16 @@ def cadastrar(request):
 
     # print(type(produto_form))
     return render(request, 'produto/cadastro.html', {'form': produto_form})
+
+
+def editar(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    produto_form = ProdutoForm(instance=produto)
+    produto_form.fields['produto_id'].initial = id
+
+    return render(request, 'produto/cadastro.html', {
+       'form': produto_form
+    })
 
 
 def remover(request):
