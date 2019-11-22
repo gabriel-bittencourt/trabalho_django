@@ -13,7 +13,10 @@
 {% block searchBar %}
     {% include "components/barra_pesquisa.html" %}
 {% endblock %}
-
+    
+{% block navBar %}
+{% include "components/navbar.html"%}
+{% endblock %}
 
 {% block content %}
 
@@ -41,6 +44,8 @@
                     </p>
 
                 </div>
+
+                {% if admin %}
                 <div class="container d-flex flex-row justify-content-between p-3">
                     {% if form_remove_produto %}
                 
@@ -60,7 +65,13 @@
                         </form>
                     {% endif %}
                 </div>
-
+                {% else %}
+                    <a href="{% url 'produto:edita_produto' produto.id %}" class="d-flex w-50" >
+                        <button class="buy-now-btn w-100 mr-4">
+                            <span>Add to cart</span> 
+                        </button>
+                   </a>
+                {% endif %}
             </div>
 
         </div>

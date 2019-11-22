@@ -7,6 +7,8 @@ urlpatterns = [
     # Página inicial (Todos os produtos)
     path('', views.lista_produtos, name='lista_produtos'),
 
+    path('administrador/', views.administrador, name='administrador'),
+
     # Página de cadastro de novos itens
     path('cadastrar/', views.cadastrar, name="cadastrar"),
 

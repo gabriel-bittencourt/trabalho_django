@@ -7,9 +7,26 @@
         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
     </a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{% url 'produto:cadastrar' %}">Cadastrar</a>
-</li>
+
+{% if user.is_authenticated %}
+    {% if admin %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'produto:lista_produtos' %}">Usuário</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'produto:administrador' %}">Administrador</a>
+        </li>
+    {% endif %}
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'autenticacao:logout' %}">Sair</a>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'autenticacao:login' %}">Login</a>
+    </li>
+{% endif %}
 
 <!-- <li class="nav-item">
     <a class="nav-link" href="pages/register.html">Register</a>

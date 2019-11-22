@@ -7,7 +7,7 @@ from .models import Categoria, SubCategoria, Produto
 from .forms import ProdutoForm, PesquisaProdutoForm, RemoveProdutoForm
 
 
-def lista_produtos(request, slug_subcategoria=None):
+def lista_produtos(request, slug_subcategoria=None, admin=False):
     subcategoria = None
 
     categorias = Categoria.objects.all()
@@ -68,12 +68,15 @@ def lista_produtos(request, slug_subcategoria=None):
     return render(request, 'produto/index.html', {'categorias': categorias,
                                                   'subcategorias': subcategorias,
                                                   'produtos': produtos,
-                                                  'form': form})
+                                                  'form': form,
+                                                  'admin': admin})
 
 
 def exibe_produto(request, id, slug_produto):
     # Form que será utilizado na barra de busca
     form = PesquisaProdutoForm(request.GET)
+
+    admin = bool(request.GET.get('admin'))
 
     # Form que será utilizado para deletar produto
     form_remove_produto = RemoveProdutoForm(initial={'produto_id': id})
@@ -81,7 +84,8 @@ def exibe_produto(request, id, slug_produto):
     produto = get_object_or_404(Produto, id=id)
     return render(request, 'produto/exibe.html', {'produto': produto,
                                                   'form': form, 
-                                                  'form_remove_produto': form_remove_produto })
+                                                  'form_remove_produto': form_remove_produto,
+                                                  'admin': admin })
 
 
 def pesquisa_produto(request):
@@ -172,3 +176,11 @@ def remover(request):
                          'Produto removido com sucesso.')
 
     return render(request, 'produto/exibe.html', {'produto': produto})
+
+
+def administrador(request):
+    x = request.GET.get('x')
+
+    print("X:", x)
+
+    return lista_produtos(request, admin=True)

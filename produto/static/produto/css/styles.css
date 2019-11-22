@@ -66,6 +66,58 @@ body {
     border-radius: 10px;
 }
 
+.delete-btn {
+    background-color: white;
+    height: 50px;
+    /* padding-horizontal: 2px; */
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fc1e1e;
+    border: solid 1px #fc1e1e;
+    border-radius: 3px;
+    /* transition: all 5s; */
+    transition: color 0.8s, 
+                font-size 0.5s,
+                border 0.4s,
+                border-radius 0.7s,
+                background 1s;
+}
+
+.delete-btn:hover {
+    background: rgba(252, 30, 30, 0.6);
+    color: #fff;
+    font-size: 17px;
+    border: solid 2px #fc1e1e;
+    border-radius: 10px;
+}
+
+.buy-now-btn {
+    background-color: white;
+    height: 50px;
+    /* padding-horizontal: 2px; */
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #007bff;
+    border: solid 1px #007bff;
+    border-radius: 3px;
+    /* transition: all 5s; */
+    transition: color 0.8s, 
+                font-size 0.5s,
+                border 0.4s,
+                border-radius 0.7s,
+                background 1s;
+}
+
+.buy-now-btn:hover {
+    background: rgba(0, 123, 255, 0.6);
+    color: #fff;
+    font-size: 17px;
+    border: solid 2px #007bff;
+    border-radius: 10px;
+}
+
 .itemName{
     color: #333;
     font-size: 21px;
