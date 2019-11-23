@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 
 
 # Create your models here.
@@ -49,5 +50,21 @@ class Produto(models.Model):
     def get_absolute_path(self):
         return reverse('produto:exibe_produto', args=[self.id, self.slug])
         
+    def __str__(self):
+        return self.nome
+
+
+class ItemCarrinho(models.Model):
+    produto = models.ForeignKey(Produto, related_name='produtos', on_delete=models.DO_NOTHING)
+    qtd = models.IntegerField(default=1)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='produtos',
+                             on_delete=models.DO_NOTHING,
+                             null=True)
+
+    class Meta:
+        db_table = 'item_carrinho'
+        ordering = ('produto',)
+
     def __str__(self):
         return self.nome
