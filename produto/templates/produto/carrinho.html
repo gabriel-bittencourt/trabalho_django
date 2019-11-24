@@ -17,6 +17,53 @@ Title
 
 {% block content %}
 
+<h5 class="mb-3">Lista de Produtos</h5>
+<table style='width:100%' class='table table-striped table-sm table-bordered'>
+    <thead>
+        <tr>
+            <th class='texto text-center'>Categoria</th>
+            <th class='texto text-center'>Nome</th>
+            <th class='texto text-center'>Preço</th>
+            <th class='texto text-center'>Quantidade</th>
+            <th class='texto text-center'>Subtotal</th>
+            <!-- <th class='texto text-center'>Operação</th> -->
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for subcategoria, produto, qtd, subtotal in produtos %}
+
+        <tr>
+            <td>{{subcategoria}}</td>
+            <td>{{produto}}</td>
+            <td>{{produto.preco}}</td>
+            <td>{{qtd}}</td>
+            <td>{{subtotal}}</td>
+        </tr>
+        
+
+        {% endfor %}
+
+        <tr>
+            <td colspan='4' class='text-left'>
+                <span class='texto font-weight-bold'>
+                    Total...
+                </span>
+            </td>
+            <td class='text-right pr-2'>
+                <span id="total" class='texto font-weight-bold'>
+                    {{ total }}
+                </span>
+            </td>
+            <!-- <td width='15%'>
+
+            </td> -->
+        </tr>
+    </tbody>
+</table>
+
+
+
 {% endblock %}
 
 {% block domready %}

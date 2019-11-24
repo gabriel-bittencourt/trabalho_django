@@ -6,6 +6,8 @@ from django.core.paginator import Paginator
 from .models import Categoria, SubCategoria, Produto, ItemCarrinho
 from .forms import ProdutoForm, PesquisaProdutoForm, RemoveProdutoForm, ItemCarrinhoForm
 
+from functools import reduce
+
 
 def lista_produtos(request, slug_subcategoria=None, admin=False):
     subcategoria = None
@@ -83,9 +85,9 @@ def exibe_produto(request, id, slug_produto):
 
     produto = get_object_or_404(Produto, id=id)
     return render(request, 'produto/exibe.html', {'produto': produto,
-                                                  'form': form, 
+                                                  'form': form,
                                                   'form_remove_produto': form_remove_produto,
-                                                  'admin': admin })
+                                                  'admin': admin})
 
 
 def pesquisa_produto(request):
@@ -161,7 +163,7 @@ def editar(request, id):
     produto_form.fields['produto_id'].initial = id
 
     return render(request, 'produto/cadastro.html', {
-       'form': produto_form
+        'form': produto_form
     })
 
 
@@ -180,7 +182,22 @@ def remover(request):
 
 def carrinho(request):
 
-    return render(request, 'produto/index.html')
+    # Query de itens do carrinho
+    itens = ItemCarrinho.objects.filter(user=request.user)
+
+    # Vetor de (produto, qtd, subtotal) no carrinho do usuário atual
+    produtos = list(
+        ( (i.produto.subCategoria, i.produto, i.qtd, i.produto.preco * i.qtd) for i in itens )
+    )
+
+    # Soma dos subtotais
+    if produtos:
+        total = reduce(lambda a, b: a+b, list((produto[3] for produto in produtos)))
+    else:
+        total = 0
+
+    return render(request, 'produto/carrinho.html', {"total": total, "produtos": produtos})
+
 
 def adicionarAoCarrinho(request):
     if request.POST:
@@ -189,7 +206,8 @@ def adicionarAoCarrinho(request):
         produto = get_object_or_404(Produto, id=produto_id)
         qtd = 1
 
-        itemCarrinho = ItemCarrinho(produto=produto, user=request.user, qtd=qtd)
+        itemCarrinho = ItemCarrinho(
+            produto=produto, user=request.user, qtd=qtd)
 
         itemCarrinho.save()
 
@@ -199,4 +217,3 @@ def adicionarAoCarrinho(request):
 def administrador(request):
 
     return lista_produtos(request, admin=True)
-
