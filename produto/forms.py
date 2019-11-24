@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django import forms
 from django.core.validators import RegexValidator
-from produto.models import Produto, Categoria, SubCategoria
+from produto.models import Produto, Categoria, SubCategoria, ItemCarrinho
 from trabalho import settings
 from datetime import datetime, timedelta
 
@@ -33,7 +33,7 @@ class ProdutoForm(forms.ModelForm):
     subCategoria = forms.ModelChoiceField(
         error_messages={'required': 'Campo obrigatório.', },
         queryset=SubCategoria.objects.all().order_by('nome'),
-        empty_label='--- Selecione uma sub-categoria ---',
+        empty_label='--- Selecione uma Categoria ---',
         widget=forms.Select(attrs={'class': 'form-control form-control-sm'}),
         required=True)
 
@@ -76,3 +76,16 @@ class RemoveProdutoForm(forms.Form):
         fields = ('produto_id')
 
     produto_id = forms.CharField(widget=forms.HiddenInput(), required=True)
+
+
+class ItemCarrinhoForm(forms.ModelForm):
+    
+    class Meta:
+        model = ItemCarrinho
+        fields = ('qtd', 'produto', 'user')
+
+        produto = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+
+        user = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+
+        qtd = forms.IntegerField(widget=forms.HiddenInput(), required=True)

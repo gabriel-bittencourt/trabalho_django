@@ -108,12 +108,22 @@ Title
 
                         {% if not admin %}
 
-                            <div class="container">
-                                <button type="button" class="add-cart-btn w-100">
-                                    <span>Add to Cart</span>
-                                </button>
-                            </div>
-     
+                            <form 
+                                action="{% url 'produto:adicionar_ao_carrinho' %}"
+                                method="POST"
+                                class="inclusao w-100"
+                                data="{{produto.id}}"
+                                novalidate>
+
+                                    <span id="produto_id">{{produto.id}}</span>
+                                    <div class="container w-100">
+                                        {% csrf_token %}
+                                        <button id="add_to_cart" type="submit" class="add-cart-btn w-100">
+                                            <span>Add to Cart</span>
+                                        </button>
+                                    </div>
+                               
+                            </form>
                         {% endif %}
                     </div>
                 </div>
@@ -134,4 +144,41 @@ Title
     <!-- /.col-lg-9 -->
 
 </div>
+{% endblock %}
+
+{% block domready %}
+
+
+$(".inclusao").each(function () {
+    var $this = $(this);
+
+    $this.submit(function(e) {
+
+        e.preventDefault()
+        console.log("e", e)
+    
+        let url = $(this).attr('action')
+        console.log("url", url)
+    
+        let produto_id = $(this).attr('data')
+        console.log(produto_id)
+    
+        let formData = $(this).serializeArray()
+    
+        var data = {
+            produto_id: produto_id,
+            csrfmiddlewaretoken: formData[0].value
+        }
+        console.log("DATA", data)
+
+
+        $.post(url, data, function(resposta) {
+            // console.log("resposta", resposta)
+        })
+    
+    })
+
+});
+
+
 {% endblock %}

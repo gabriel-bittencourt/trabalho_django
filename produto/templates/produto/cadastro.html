@@ -21,7 +21,7 @@
     <form id="form" action ="{% url 'produto:cadastrar' %}" method ="POST" novalidate>
 
         <div class="form-group row" style="margin-bottom: 10px;">
-            <label for="id_subcategoria" class="col-lg-2 col-form-label font-weight-bold">Sub-categoria</label>
+            <label for="id_subcategoria" class="col-lg-2 col-form-label font-weight-bold">Categoria</label>
             <div class="col-lg-10">
                 {{ form.subCategoria }}
                 {% if form.subCategoria.errors %}

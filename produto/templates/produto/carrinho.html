@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block titulo %}
+Title
+{% endblock %}
+
+{% block searchBar %}
+{% include "components/barra_pesquisa.html" with form=form %}
+{% endblock %}
+
+{% block navBar %}
+{% include "components/navbar.html" with admin=admin %}
+{% endblock %}
+
+
+{% block content %}
+
+{% endblock %}
+
+{% block domready %}
+
+
+{% endblock %}

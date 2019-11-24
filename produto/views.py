@@ -3,8 +3,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-from .models import Categoria, SubCategoria, Produto
-from .forms import ProdutoForm, PesquisaProdutoForm, RemoveProdutoForm
+from .models import Categoria, SubCategoria, Produto, ItemCarrinho
+from .forms import ProdutoForm, PesquisaProdutoForm, RemoveProdutoForm, ItemCarrinhoForm
 
 
 def lista_produtos(request, slug_subcategoria=None, admin=False):
@@ -178,9 +178,25 @@ def remover(request):
     return render(request, 'produto/exibe.html', {'produto': produto})
 
 
-def administrador(request):
-    x = request.GET.get('x')
+def carrinho(request):
 
-    print("X:", x)
+    return render(request, 'produto/index.html')
+
+def adicionarAoCarrinho(request):
+    if request.POST:
+
+        produto_id = request.POST.get('produto_id')
+        produto = get_object_or_404(Produto, id=produto_id)
+        qtd = 1
+
+        itemCarrinho = ItemCarrinho(produto=produto, user=request.user, qtd=qtd)
+
+        itemCarrinho.save()
+
+        return render(request, 'produto/index.html')
+
+
+def administrador(request):
 
     return lista_produtos(request, admin=True)
+

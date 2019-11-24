@@ -7,13 +7,25 @@ urlpatterns = [
     # Página inicial (Todos os produtos)
     path('', views.lista_produtos, name='lista_produtos'),
 
+    # Página inicial modo administrador(Editar, Remover, etc)
     path('administrador/', views.administrador, name='administrador'),
+
+    # Página de resultados de pesquisa de produtos
+    path('pesquisa_produto/', views.pesquisa_produto, name='pesquisa_produto'),
 
     # Página de cadastro de novos itens
     path('cadastrar/', views.cadastrar, name="cadastrar"),
 
+    # Remover produto
     path('remover/', views.remover, name='remover'),
 
+    # Adicionar item ao carrinho
+    path('adicionar_ao_carrinho', views.adicionarAoCarrinho, name="adicionar_ao_carrinho"),
+
+    # Página do carrinho atual
+    path('carrinho', views.carrinho, name="carrinho"),
+
+    # Página de edição de produto
     path('edita_produto/<int:id>/', views.editar, name='edita_produto'),
 
     # Página de produtos filtrados por subcategoria
@@ -22,6 +34,4 @@ urlpatterns = [
     # Página específica de cada produto
     path('<int:id>/<slug:slug_produto>/', views.exibe_produto, name='exibe_produto'),
 
-    # Página de resultados de pesquisa de produtos
-    path('pesquisa_produto/', views.pesquisa_produto, name='pesquisa_produto'),
 ]

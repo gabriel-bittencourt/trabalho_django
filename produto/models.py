@@ -64,7 +64,7 @@ class ItemCarrinho(models.Model):
 
     class Meta:
         db_table = 'item_carrinho'
-        ordering = ('produto',)
+        ordering = ('user',)
 
     def __str__(self):
-        return self.nome
+        return "USER: " + str(self.user) + ", PRODUTO: " + str(self.produto)
