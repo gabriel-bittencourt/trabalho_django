@@ -187,16 +187,29 @@ def carrinho(request):
 
     # Vetor de (produto, qtd, subtotal) no carrinho do usuário atual
     produtos = list(
-        ( (i.produto.subCategoria, i.produto, i.qtd, i.produto.preco * i.qtd) for i in itens )
+        ( (i.id, i.produto.subCategoria, i.produto, i.qtd, i.produto.preco * i.qtd) for i in itens )
     )
 
     # Soma dos subtotais
     if produtos:
-        total = reduce(lambda a, b: a+b, list((produto[3] for produto in produtos)))
+        total = reduce(lambda a, b: a+b, list((produto[4] for produto in produtos)))
     else:
         total = 0
 
     return render(request, 'produto/carrinho.html', {"total": total, "produtos": produtos})
+
+def removerDoCarrinho(request):
+    if request.POST:
+        item_id = request.POST.get('item_id')
+
+        item = get_object_or_404(ItemCarrinho, id=item_id)
+
+        print("ITEM", item)
+
+        # produto.delete()
+
+        return render(request, 'produto/carrinho.html')
+    pass
 
 
 def adicionarAoCarrinho(request):

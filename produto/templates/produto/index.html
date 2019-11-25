@@ -169,8 +169,7 @@ $(".inclusao").each(function () {
             produto_id: produto_id,
             csrfmiddlewaretoken: formData[0].value
         }
-        console.log("DATA", data)
-
+        console.log(data);
 
         $.post(url, data, function(resposta) {
             // console.log("resposta", resposta)

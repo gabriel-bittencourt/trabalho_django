@@ -22,6 +22,8 @@ urlpatterns = [
     # Adicionar item ao carrinho
     path('adicionar_ao_carrinho', views.adicionarAoCarrinho, name="adicionar_ao_carrinho"),
 
+    path('remover_do_carrinho', views.removerDoCarrinho, name="remover_do_carrinho"),
+
     # Página do carrinho atual
     path('carrinho', views.carrinho, name="carrinho"),
 

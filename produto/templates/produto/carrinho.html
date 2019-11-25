@@ -26,19 +26,31 @@ Title
             <th class='texto text-center'>Preço</th>
             <th class='texto text-center'>Quantidade</th>
             <th class='texto text-center'>Subtotal</th>
-            <!-- <th class='texto text-center'>Operação</th> -->
+            <th class='texto text-center'>Operação</th>
         </tr>
     </thead>
     <tbody>
 
-        {% for subcategoria, produto, qtd, subtotal in produtos %}
-
-        <tr>
+        {% for item_id,  subcategoria, produto, qtd, subtotal in produtos %}
+        <tr id="{{item_id}}">
             <td>{{subcategoria}}</td>
             <td>{{produto}}</td>
             <td>{{produto.preco}}</td>
             <td>{{qtd}}</td>
             <td>{{subtotal}}</td>
+            <td>
+                <form style='margin-bottom: 0px;'                            
+                    action ="{% url 'produto:remover_do_carrinho' %}" 
+                    method ='post'
+                    data="{{subtotal}}"
+                    novalidate
+                > 
+                  {% csrf_token %}                                          
+                    <button type='button' class='btn btn-sm btn-danger remover' data="{{item_id}}">             
+                        <img src="{% static 'produto/images/skin/database_delete.png' %}"> Remover        
+                    </button>                                                 
+                 </form>  
+            </td>
         </tr>
         
 
@@ -67,6 +79,35 @@ Title
 {% endblock %}
 
 {% block domready %}
+
+$("tbody").on("click", "button.remover", function() {
+    let item_id = $(this).attr('data');
+
+    let subtotal = parseFloat( $(this).parent().attr('data') );
+
+    // $('#' + item_id.toString()).remove();
+
+    let novoTotal = parseFloat( $("#total").html() ) - subtotal;
+    console.log(novoTotal);
+
+    let formData = $(this).parent().serializeArray()
+
+    let url =  $(this).parent().attr('action')
+    console.log(url)
+
+    var data = {
+            item_id: item_id,
+            csrfmiddlewaretoken: formData[0].value
+        }
+
+    console.log(data);
+
+    $.post(url, data, function(resposta) {
+        $('#' + item_id.toString()).remove();
+
+        $('#total').html(novoTotal);
+    })
+})
 
 
 {% endblock %}
