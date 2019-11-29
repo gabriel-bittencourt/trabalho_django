@@ -114,17 +114,15 @@ Title
                                 class="inclusao w-100"
                                 data="{{produto.id}}"
                                 novalidate>
-
-                                    <span id="produto_id">{{produto.id}}</span>
                                     <div class="container w-100">
                                         {% csrf_token %}
                                         <button id="add_to_cart" type="submit" class="add-cart-btn w-100">
                                             <span>Add to Cart</span>
                                         </button>
-                                    </div>
-                               
+                                    </div>  
                             </form>
                         {% endif %}
+                        
                     </div>
                 </div>
             </div>

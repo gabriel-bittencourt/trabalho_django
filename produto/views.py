@@ -4,11 +4,12 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 
 from .models import Categoria, SubCategoria, Produto, ItemCarrinho
-from .forms import ProdutoForm, PesquisaProdutoForm, RemoveProdutoForm, ItemCarrinhoForm
+
+from .forms import *
 
 from functools import reduce
 
-
+# Exibe a página inicial
 def lista_produtos(request, slug_subcategoria=None, admin=False):
     subcategoria = None
 
@@ -73,7 +74,7 @@ def lista_produtos(request, slug_subcategoria=None, admin=False):
                                                   'form': form,
                                                   'admin': admin})
 
-
+# Exibe página de produto
 def exibe_produto(request, id, slug_produto):
     # Form que será utilizado na barra de busca
     form = PesquisaProdutoForm(request.GET)
@@ -89,14 +90,14 @@ def exibe_produto(request, id, slug_produto):
                                                   'form_remove_produto': form_remove_produto,
                                                   'admin': admin})
 
-
+# Gerencia a pesquisa
 def pesquisa_produto(request):
     form = PesquisaProdutoForm()
     return render(request, 'produto/pesquisa_produto.html', {
         'form': form
     })
 
-
+# Cadastra um novo produto
 def cadastrar(request):
     if request.POST:
         produto_id = request.POST.get('produto_id')
@@ -156,7 +157,7 @@ def cadastrar(request):
     # print(type(produto_form))
     return render(request, 'produto/cadastro.html', {'form': produto_form})
 
-
+# Edita um produto existente
 def editar(request, id):
     produto = get_object_or_404(Produto, id=id)
     produto_form = ProdutoForm(instance=produto)
@@ -166,7 +167,7 @@ def editar(request, id):
         'form': produto_form
     })
 
-
+# Remove um produto
 def remover(request):
     produto_id = request.POST.get('produto_id')
 
@@ -179,7 +180,7 @@ def remover(request):
 
     return render(request, 'produto/exibe.html', {'produto': produto})
 
-
+# Exibe página de carrinho
 def carrinho(request):
 
     # Query de itens do carrinho
@@ -198,20 +199,18 @@ def carrinho(request):
 
     return render(request, 'produto/carrinho.html', {"total": total, "produtos": produtos})
 
+# Remove do carrinho
 def removerDoCarrinho(request):
     if request.POST:
         item_id = request.POST.get('item_id')
 
         item = get_object_or_404(ItemCarrinho, id=item_id)
 
-        print("ITEM", item)
-
-        # produto.delete()
+        item.delete()
 
         return render(request, 'produto/carrinho.html')
-    pass
 
-
+# Adiciona ao carrinho
 def adicionarAoCarrinho(request):
     if request.POST:
 
@@ -219,14 +218,20 @@ def adicionarAoCarrinho(request):
         produto = get_object_or_404(Produto, id=produto_id)
         qtd = 1
 
-        itemCarrinho = ItemCarrinho(
-            produto=produto, user=request.user, qtd=qtd)
+        # Verifica se item já está no carrinho do usuário
+        itemCarrinho = ItemCarrinho.objects.filter(
+            user=request.user, produto=produto
+        )
 
-        itemCarrinho.save()
+        # Se ainda não estiver, salva item
+        if not itemCarrinho:
+            itemCarrinho = ItemCarrinho(
+                produto=produto, user=request.user, qtd=qtd)
+
+            itemCarrinho.save()
 
         return render(request, 'produto/index.html')
 
-
+# Exibe a página inicial no modo Administrador
 def administrador(request):
-
     return lista_produtos(request, admin=True)
