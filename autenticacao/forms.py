@@ -10,7 +10,10 @@ class AuthenticationFormCustomizado(AuthenticationForm):
 
    username = forms.CharField(
       error_messages={'required': 'Campo obrigatório.', },
-      widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'maxlength': '25'}),
+      widget=forms.TextInput(attrs={
+          'class': 'input-field d-block position-static w-100 text-dark py-1',
+          'maxlength': '25'
+        }),
       required=True)
    
    # <input type='text'
@@ -22,7 +25,10 @@ class AuthenticationFormCustomizado(AuthenticationForm):
 
    password = forms.CharField(
       error_messages={'required': 'Campo obrigatório.', },
-      widget=PasswordInput(attrs={'class': 'form-control form-control-sm', 'maxlength': '25'}),
+      widget=PasswordInput(attrs={
+          'class': 'input-field',
+          'maxlength': '25'
+        }),
       required=True)
    
    # <input type='password'

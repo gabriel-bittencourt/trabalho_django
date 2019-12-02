@@ -1,13 +1,101 @@
 {% extends 'base.html' %}
+
 {% block title %}Login{% endblock %}
 
+{% load static %}
+
+{% block customStyles %}
+    <link href="{% static 'produto/css/login.css' %}" rel="stylesheet">
+{% endblock %}
+
+
 {% block content %}
-    <div class="container">
-        <h1>Login</h1>
-        <form action="." method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input class="btn btn-primary" type="submit" value="Login">
-        </form>
+    <div class="container w-100 px-5 py-1 d-flex flex-wrap justify-content-center align-items-center bg-light">
+        <div class="wrap-login w-50 bg-white border border-primary rounded shadow">
+
+            <h1>Login</h1>
+            <form action="." method="post" class="form-login w-100">
+                {% csrf_token %}
+
+                <div class="wrap-input validate-input w-100 border-bottom border-secondary mt-4 mb-5">
+
+                        <!-- Input -->
+                        <!-- <input name="username" class="input-field d-block position-static w-100 text-dark py-1" type="text"> -->
+                        {{ form.username }}
+
+                        <!-- Placeholder -->
+                        <span class="focus-input-field d-block w-100" data-placeholder="Username"></span>
+                </div>
+                
+
+                <!-- Campo password -->
+                    <div class="wrap-input validate-input w-100 border-bottom border-secondary mb-4"
+                        data-validate="Enter password">
+
+                        <!-- Input -->
+                        {{ form.password }}
+
+                        <!-- Placeholder -->
+                        <span class="focus-input-field" data-placeholder="Password"></span>
+
+                        <!-- Botão mostrar senha -->
+                        <span id="field-icon" toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password">
+                        </span>
+                    </div>
+                <!--  -->
+
+                <!-- Botão Login -->
+                <div class="container-login100-form-btn d-flex flex-wrap justify-content-center py-2">
+                    
+                    <input class="btn btn-primary" type="submit" value="Login">
+                </div>
+                <!--  -->
+            </form>
+
+        </div>
     </div>
+{% endblock %}
+
+
+
+{% block customScript %}    
+
+<script>
+$('.input-field').each(function () {
+
+    $(this).on('blur', function () {
+        if ($(this).val().trim() != "") {
+            $(this).addClass('has-val');
+        }
+        else {
+            $(this).removeClass('has-val');
+        }
+    }); // onblur
+
+}); // each
+
+$('#password-field').on('focus', function () {
+    $('#field-icon').css('color', '#b721ff');
+});
+
+$('#password-field').on('blur', function () {
+    if ($('#password-field').val().trim() == "") {
+        $('#field-icon').css('color', '#6c757d');
+    }
+});
+
+
+$('.toggle-password').click(function () {
+
+    $(this).toggleClass("fa-eye fa-eye-slash");
+    var input = $('#password-field');
+
+    if (input.attr("type") == "password") {
+        input.attr("type", "text");
+    } else {
+        input.attr("type", "password");
+    }
+});
+</script>
+
 {% endblock %}
