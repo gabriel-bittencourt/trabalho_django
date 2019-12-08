@@ -2,11 +2,13 @@
 
 {% load static %}
 
+<!-- Página do carrinho de compras -->
 <li class="nav-item" id="shoppingCart">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{% url 'carrinho:carrinho' %}">
         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
     </a>
 </li>
+<!--  -->
 
 {% if user.is_authenticated %}
     {% if admin %}
@@ -27,7 +29,3 @@
         <a class="nav-link" href="{% url 'autenticacao:login' %}">Login</a>
     </li>
 {% endif %}
-
-<!-- <li class="nav-item">
-    <a class="nav-link" href="pages/register.html">Register</a>
-</li> -->

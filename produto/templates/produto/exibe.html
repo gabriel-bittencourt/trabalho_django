@@ -22,9 +22,23 @@
 
     <div class="container py-3 px-md-5 bg-white">
 
-        <!-- Passar url com parâmetros -->
-        <!-- <h6>{% url 'produto:exibe_produto' id=1 slug_produto="les-paul-tribute" %}</h6> -->
+        <!-- Mensagens de erro -->
+        {% if messages %}
+        <div class="row mt-5">
+            <div class="col-12">
+                {% for message in messages %}
+                <ul class="list-group rounded {{ message.tags }}">
+                    <li style="padding-top: 7px; padding-bottom: 7px;"
+                        class="list-group-item list-group-item-{% if message.tags == 'info' %}info{% else %}danger{% endif %}">
+                        {{ message }}
+                    </li>
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
         <!--  -->
+
 
         <div class="row mx-md-4 mx-sm-0 p-lg-0 py-md-1 py-sm-0 ">
 
@@ -66,11 +80,19 @@
                     {% endif %}
                 </div>
                 {% else %}
-                    <a href="{% url 'produto:edita_produto' produto.id %}" class="d-flex w-50" >
-                        <button class="buy-now-btn w-100 mr-4">
-                            <span>Add to cart</span> 
-                        </button>
-                   </a>
+                    <form 
+                        action="{% url 'carrinho:adicionar_ao_carrinho' %}"
+                        method="POST"
+                        class="inclusao w-100"
+                        data="{{produto.id}}"
+                        novalidate>
+                            <div class="container w-100">
+                                {% csrf_token %}
+                                <button id="add_to_cart" type="submit" class="add-cart-btn w-100">
+                                    <span>Add to Cart</span>
+                                </button>
+                            </div>  
+                    </form>
                 {% endif %}
             </div>
 
@@ -87,6 +109,36 @@
         $("#form_remove_produto").append('{{ form_remove_produto.produto_id }}')
         $("#form_remove_produto").submit()
     })
+
+    $(".inclusao").each(function () {
+        var $this = $(this);
+    
+        $this.submit(function(e) {
+    
+            e.preventDefault()
+            console.log("e", e)
+        
+            let url = $(this).attr('action')
+            console.log("url", url)
+        
+            let produto_id = $(this).attr('data')
+            console.log(produto_id)
+        
+            let formData = $(this).serializeArray()
+        
+            var data = {
+                produto_id: produto_id,
+                csrfmiddlewaretoken: formData[0].value
+            }
+            console.log(data);
+    
+            $.post(url, data, function(resposta) {
+                // console.log("resposta", resposta)
+            })
+        
+        })
+    
+    });
 
 {% endblock %}
 

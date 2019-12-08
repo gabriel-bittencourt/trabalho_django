@@ -3,7 +3,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-from .models import Categoria, SubCategoria, Produto, ItemCarrinho
+from .models import Categoria, SubCategoria, Produto
 
 from .forms import *
 
@@ -79,16 +79,19 @@ def exibe_produto(request, id, slug_produto):
     # Form que será utilizado na barra de busca
     form = PesquisaProdutoForm(request.GET)
 
+    #
     admin = bool(request.GET.get('admin'))
 
     # Form que será utilizado para deletar produto
     form_remove_produto = RemoveProdutoForm(initial={'produto_id': id})
 
+    # Carrega o produto do banco
     produto = get_object_or_404(Produto, id=id)
+
     return render(request, 'produto/exibe.html', {'produto': produto,
                                                   'form': form,
                                                   'form_remove_produto': form_remove_produto,
-                                                  'admin': admin})
+                                                  'admin': admin })
 
 # Gerencia a pesquisa
 def pesquisa_produto(request):
@@ -118,6 +121,7 @@ def cadastrar(request):
                     nome=produto_form.data['nome'],
                     marca=produto_form.data['marca'],
                     preco=produto_form.clean_preco(),
+                    user=request.user,
                     subCategoria=get_object_or_404(
                         SubCategoria, id=produto_form.data['subCategoria']),
                     slug=produto_form.data['nome'].lower().replace(' ', '-'),
@@ -135,6 +139,7 @@ def cadastrar(request):
                     nome=produto_form.data['nome'],
                     marca=produto_form.data['marca'],
                     preco=produto_form.clean_preco(),
+                    user=request.user,
                     subCategoria=get_object_or_404(
                         SubCategoria, id=produto_form.data['subCategoria']),
                     slug=produto_form.data['nome'].lower().replace(' ', '-'),
@@ -173,64 +178,17 @@ def remover(request):
 
     produto = get_object_or_404(Produto, id=produto_id)
 
-    produto.delete()
-
-    messages.add_message(request, messages.INFO,
+    if produto.user == request.user:
+        produto.delete()
+        
+        messages.add_message(request, messages.INFO,
                          'Produto removido com sucesso.')
 
-    return render(request, 'produto/exibe.html', {'produto': produto})
-
-# Exibe página de carrinho
-def carrinho(request):
-
-    # Query de itens do carrinho
-    itens = ItemCarrinho.objects.filter(user=request.user)
-
-    # Vetor de (produto, qtd, subtotal) no carrinho do usuário atual
-    produtos = list(
-        ( (i.id, i.produto.subCategoria, i.produto, i.qtd, i.produto.preco * i.qtd) for i in itens )
-    )
-
-    # Soma dos subtotais
-    if produtos:
-        total = reduce(lambda a, b: a+b, list((produto[4] for produto in produtos)))
     else:
-        total = 0
+        messages.add_message(request, messages.ERROR,
+                         'Produto adicionado por outro usuário.')
 
-    return render(request, 'produto/carrinho.html', {"total": total, "produtos": produtos})
-
-# Remove do carrinho
-def removerDoCarrinho(request):
-    if request.POST:
-        item_id = request.POST.get('item_id')
-
-        item = get_object_or_404(ItemCarrinho, id=item_id)
-
-        item.delete()
-
-        return render(request, 'produto/carrinho.html')
-
-# Adiciona ao carrinho
-def adicionarAoCarrinho(request):
-    if request.POST:
-
-        produto_id = request.POST.get('produto_id')
-        produto = get_object_or_404(Produto, id=produto_id)
-        qtd = 1
-
-        # Verifica se item já está no carrinho do usuário
-        itemCarrinho = ItemCarrinho.objects.filter(
-            user=request.user, produto=produto
-        )
-
-        # Se ainda não estiver, salva item
-        if not itemCarrinho:
-            itemCarrinho = ItemCarrinho(
-                produto=produto, user=request.user, qtd=qtd)
-
-            itemCarrinho.save()
-
-        return render(request, 'produto/index.html')
+    return render(request, 'produto/exibe.html', {'produto': produto})
 
 # Exibe a página inicial no modo Administrador
 def administrador(request):
