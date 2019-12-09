@@ -7,16 +7,26 @@ from carrinho.models import ItemCarrinho
 
 from carrinho.forms import *
 
+from .carrinho import Carrinho
+
 from functools import reduce
 
 
 # Exibe página de carrinho
 def carrinho(request):
 
-    # Query de itens do carrinho
-    itens = ItemCarrinho.objects.filter(user=request.user)
+    carrinho = Carrinho(request)
 
-    # Vetor de (produto, qtd, subtotal) no carrinho do usuário atual
+    # Se tem um usuário logado, carrega do banco
+    if request.user.is_authenticated:
+        itens = ItemCarrinho.objects.filter(user=request.user)
+
+    # Se não, carrega da sessão
+    else:
+        itens = carrinho.get_produtos()
+
+
+    # Vetor de (produto, qtd, subtotal)
     produtos = list(
         ( (i.id, i.produto.subCategoria, i.produto, i.qtd, i.produto.preco * i.qtd) for i in itens )
     )
@@ -32,11 +42,18 @@ def carrinho(request):
 # Remove do carrinho
 def remover_do_carrinho(request):
     if request.POST:
-        item_id = request.POST.get('item_id')
+        produto_id = request.POST.get('produto_id')
+        produto = get_object_or_404(Produto, id=produto_id)
 
-        item = get_object_or_404(ItemCarrinho, id=item_id)
-
-        item.delete()
+        # Se usuário estiver logado, remove do banco
+        if request.user.is_authenticated:
+            item = get_object_or_404(ItemCarrinho, produto=produto, user=request.user)
+            item.delete()
+        
+        #
+        else:
+            carrinho = Carrinho(request)
+            carrinho.remover(produto_id)
 
         return render(request, 'carrinho/carrinho.html')
 
@@ -48,23 +65,33 @@ def adicionar_ao_carrinho(request):
         produto = get_object_or_404(Produto, id=produto_id)
         qtd = 1
 
+        # Se usuário estiver logado
+        if request.user.is_authenticated:
 
-        # Verifica se item já está no carrinho do usuário
+            # Verifica se item já está no carrinho do usuário
 
-        # Se já estiver, adiciona mais um ao carrinho
-        try:
-            itemCarrinho = ItemCarrinho.objects.get(produto=produto, user=request.user)
+            # Se já estiver, adiciona mais um ao carrinho
+            try:
+                itemCarrinho = ItemCarrinho.objects.get(produto=produto, user=request.user)
 
-            itemCarrinho.qtd = itemCarrinho.qtd + 1
+                itemCarrinho.qtd = itemCarrinho.qtd + 1
 
-            itemCarrinho.save()
+                itemCarrinho.save()
 
 
-        # Se não estiver salva novo item de carrinho
-        except ItemCarrinho.DoesNotExist:
-            itemCarrinho = ItemCarrinho(
-                produto=produto, user=request.user, qtd=qtd)
+            # Se não estiver salva novo item de carrinho
+            except ItemCarrinho.DoesNotExist:
+                itemCarrinho = ItemCarrinho(
+                    produto=produto, user=request.user, qtd=qtd)
 
-            itemCarrinho.save()
+                itemCarrinho.save()
+
+        # Se usuário não estiver logado
+        else:
+            carrinho = Carrinho(request)
+            carrinho.adicionar(produto_id, qtd)
+
+            print(carrinho.carrinho)
+            
 
         return render(request, 'produto/index.html')

@@ -1,32 +1,55 @@
 from django.http import HttpResponseRedirect
 from trabalho import settings
+import time
 
 class LoginRequiredMiddleware:
    def __init__(self, get_response):
       self.get_response = get_response
       self.login_path = getattr(settings, 'LOGIN_URL')
-   
-      print('init - get_response = ', get_response)
-      print('init - login_path = ', self.login_path)
-   
-      # init - get_response =  <function BaseHandler._get_response at 0x0000023F187A2488>
-      # init - login_path =  /autenticacao/login/
+
    def __call__(self, request):
-      # Code to be executed for each request before
-      # the view (and later middleware) are called.
-   
-      print('request.path = ', request.path)
-      print('self.login_path = ', self.login_path)
-      print('request.user.is_anonymous = ', request.user.is_anonymous)
-   
-      if request.path != self.login_path and request.user.is_anonymous:
-         return HttpResponseRedirect('%s?next=%s' % (self.login_path, request.path))
-   
+
+      print("\n-----------------------------------------------------")
+      print("--------- Início do LoginRequiredMiddleware ---------")
+      print("-----------------------------------------------------")
+
+      # print("************* Request GET Parameters *************")
+      for chave, valor in request.GET.items():
+         print(f'\nGET <==> request.path = {request.path} - Chave: {chave} <==> Valor: {valor}')
+
+      # print("************* Request POST Parameters ************")
+      for chave, valor in request.POST.items():
+         print(f'\nPOST <==> request.path = {request.path} - Chave: {chave} <==> Valor: {valor}')
+
+      # print("********************* Cookies ********************")
+      for chave, valor in request.COOKIES.items():
+         print(f'\nANTES - COOKIE <==> request.path = {request.path} - Chave: {chave} <==> Valor: {valor}')
+      
+      request.inicio = int(round(time.time() * 1000)) # Isso é um atributo!
+
       response = self.get_response(request)
-   
+
+      request.fim = int(round(time.time() * 1000))
+
+      diferenca = request.fim - request.inicio
+
+      print (f'\ndiferenca = {diferenca}')
+
       # Code to be executed for each request/response after
       # the view is called.
-   
+
+      for chave, valor in request.COOKIES.items():
+         print(f'\nDEPOIS - COOKIE <==> request.path = {request.path} - Chave: {chave} <==> Valor: {valor}')
+
+      print(f'\nDEPOIS - RESPONSE <==> response.cookies = {response.cookies}')
+
+      for chave, valor in request.session.items():
+         print(f'\nDEPOIS - SESSION <==> request.session.session_key = {request.session.session_key} - Chave: {chave} <==> Valor: {valor}')
+
+      print("\n-----------------------------------------------------")
+      print("---------- Logo antes de retornar response ----------")
+      print("-----------------------------------------------------")
+
       return response
    
    # class A:
