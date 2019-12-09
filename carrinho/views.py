@@ -95,3 +95,39 @@ def adicionar_ao_carrinho(request):
             
 
         return render(request, 'produto/index.html')
+
+
+def atualizar_quantidade(request, adicionar=True):
+    if request.POST:
+        
+        produto_id = request.POST.get('produto_id')
+        produto = get_object_or_404(Produto, id=produto_id)
+
+
+        adicionar = request.POST.get('adicionar') == "True"
+
+        # Se usuário estiver logado, atualiza no banco
+        if request.user.is_authenticated:
+            item = get_object_or_404(ItemCarrinho, produto=produto, user=request.user)
+            
+            if adicionar:
+                item.qtd += 1
+                item.save()
+            else:
+                if item.qtd == 1:
+                    remover_do_carrinho(request)
+                else:
+                    item.qtd -= 1
+                    item.save()
+
+        #
+        else:
+            carrinho = Carrinho(request)
+
+            if adicionar:
+                carrinho.adicionar(produto_id, 1)
+            else:
+                carrinho.retirar(produto_id)
+
+
+        return render(request, 'carrinho/carrinho.html')

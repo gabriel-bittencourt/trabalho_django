@@ -48,9 +48,26 @@ class Carrinho(object):
 
         self.salvar()        
 
+    # Reduz a quantidade de um certo produto
+    def retirar(self, id):
+        produto = Produto.objects.get(id=id)
 
-    def alterar(self, id, quantidade):
-        self.carrinho[id]['quantidade'] = quantidade
+        # Quantidade do produto no carrinho atual
+        qtd = self.carrinho[id]['qtd']
+
+        # Se qtd maior que um, subtrai um
+        if qtd > 1:
+            self.carrinho[id]['qtd'] -= 1
+            self.salvar()
+
+        # Se não, remove
+        else:
+            self.remover(id)
+
+
+    # Atualiza a quantidade
+    def alterar(self, id, qtd):
+        self.carrinho[id]['qtd'] = qtd
         self.salvar()
 
     # Remove do carrinho

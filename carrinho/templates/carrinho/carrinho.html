@@ -35,11 +35,52 @@ Title
 
         {% for item_id,  subcategoria, produto, qtd, subtotal in produtos %}
         <tr id="{{produto.id}}">
-            <td>{{subcategoria}}</td>
-            <td>{{produto}}</td>
-            <td>{{produto.preco}}</td>
-            <td>{{qtd}}</td>
-            <td>{{subtotal}}</td>
+
+            <td class="subcategoria">{{subcategoria}}</td>
+
+            <td class="produto">{{produto}}</td>
+
+            <td class="preco">{{produto.preco}}</td>
+
+            <td>
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    
+                    <!-- Botão Menos -->
+                    <form style='margin-bottom: 0px;'                            
+                        action ="{% url 'carrinho:atualizar_quantidade' %}" 
+                        method ='post'
+                        data="{{produto.id}}"
+                        novalidate
+                    > 
+                        {% csrf_token %} 
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill alterar" data="{{False}}">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                        </button>
+                    </form>  
+                    <!--  -->
+
+                    <!-- Quantidade -->
+                    <span id="{{produto.id}}_qtd">{{qtd}}</span>
+                    <!--  -->
+
+                    <!-- Botão Mais -->
+                    <form style='margin-bottom: 0px;'                            
+                        action ="{% url 'carrinho:atualizar_quantidade' %}" 
+                        method ='post'
+                        data="{{produto.id}}"
+                        novalidate
+                    > 
+                    {% csrf_token %} 
+                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill alterar" data="{{True}}">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                    </form>  
+                    <!--  -->
+                </div>
+            </td>
+
+            <td id="{{produto.id}}_subtotal" class="subtotal">{{subtotal}}</td>
+
             <td>
                 <form style='margin-bottom: 0px;'                            
                     action ="{% url 'carrinho:remover_do_carrinho' %}" 
@@ -47,7 +88,7 @@ Title
                     data="{{subtotal}}"
                     novalidate
                 > 
-                  {% csrf_token %}                                          
+                    {% csrf_token %}                                          
                     <button type='button' class='btn btn-sm btn-danger remover' data="{{produto.id}}">             
                         <img src="{% static 'produto/images/skin/database_delete.png' %}"> Remover        
                     </button>                                                 
@@ -76,37 +117,8 @@ Title
 
 </div>
 
-
 {% endblock %}
 
 {% block domready %}
-
-$("tbody").on("click", "button.remover", function() {
-    let produto_id = $(this).attr('data');
-
-    let subtotal = parseFloat( $(this).parent().attr('data') );
-
-    let novoTotal = parseFloat( $("#total").html() ) - subtotal;
-    console.log(novoTotal);
-
-    let formData = $(this).parent().serializeArray();
-
-    let url =  $(this).parent().attr('action')
-    console.log(url)
-
-    var data = {
-            produto_id: produto_id,
-            csrfmiddlewaretoken: formData[0].value
-        }
-
-    console.log(data);
-
-    $.post(url, data, function(resposta) {
-        $('#' + produto_id.toString()).remove();
-
-        $('#total').html(novoTotal);
-    })
-})
-
-
+    {% include "carrinho/carrinho.js" %}
 {% endblock %}
